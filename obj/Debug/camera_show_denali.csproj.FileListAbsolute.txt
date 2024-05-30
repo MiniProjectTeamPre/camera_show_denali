@@ -1,0 +1,36 @@
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csprojResolveAssemblyReference.cache
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csproj.GenerateResource.Cache
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.Form1.resources
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.exe.config
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.exe
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.pdb
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.Properties.Resources.resources
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.exe
+C:\Users\anocha\Documents\Visual Studio 2015\Projects\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.pdb
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\bin\Debug\camera_show_denali.exe.config
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\bin\Debug\camera_show_denali.exe
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\bin\Debug\camera_show_denali.pdb
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.csprojAssemblyReference.cache
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.Form1.resources
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.Properties.Resources.resources
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.csproj.GenerateResource.cache
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.csproj.CoreCompileInputs.cache
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.csproj.CopyComplete
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.exe
+C:\Users\DENALI FCT_3\Desktop\camera_show_denali\obj\Debug\camera_show_denali.pdb
+D:\Projects C#\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.exe.config
+D:\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.exe
+D:\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.pdb
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.exe.config
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.exe
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\bin\Debug\camera_show_denali.pdb
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csproj.AssemblyReference.cache
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csproj.SuggestedBindingRedirects.cache
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.Form1.resources
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.Properties.Resources.resources
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csproj.GenerateResource.cache
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csproj.CoreCompileInputs.cache
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.csproj.CopyComplete
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.exe
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.pdb
+D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.KeyPassword.resources
