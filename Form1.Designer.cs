@@ -41,16 +41,9 @@
             this.frameWidthToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Frame_width = new System.Windows.Forms.ToolStripMenuItem();
             this.onebyone = new System.Windows.Forms.ToolStripMenuItem();
-            this.setSaturationAddressInCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setSaturationAddressCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setSaturationAddress = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setGainAddress_ = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setGainAddressCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setGainAddress = new System.Windows.Forms.ToolStripMenuItem();
-            this.setGammaAddressInCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setGammaAddressCsv = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_setGammaAddress = new System.Windows.Forms.ToolStripMenuItem();
-            this.ctms_propertySetting = new System.Windows.Forms.ToolStripMenuItem();
+            this.setToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctms_propertySetup = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctms_propertySave = new System.Windows.Forms.ToolStripMenuItem();
             this.versionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.v202202ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -81,38 +74,36 @@
             this.flagtestToolStripMenuItem,
             this.frameToolStripMenuItem,
             this.onebyone,
-            this.setSaturationAddressInCSVToolStripMenuItem,
-            this.ctms_setGainAddress_,
-            this.setGammaAddressInCSVToolStripMenuItem,
+            this.setToolStripMenuItem,
             this.versionToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(238, 290);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 224);
             // 
             // setCameraToolStripMenuItem
             // 
             this.setCameraToolStripMenuItem.Name = "setCameraToolStripMenuItem";
-            this.setCameraToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.setCameraToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.setCameraToolStripMenuItem.Text = "set camera";
             this.setCameraToolStripMenuItem.Click += new System.EventHandler(this.setCameraToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.closeToolStripMenuItem.Text = "close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
             // setDebugToolStripMenuItem
             // 
             this.setDebugToolStripMenuItem.Name = "setDebugToolStripMenuItem";
-            this.setDebugToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.setDebugToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.setDebugToolStripMenuItem.Text = "set debug";
             this.setDebugToolStripMenuItem.Click += new System.EventHandler(this.setDebugToolStripMenuItem_Click);
             // 
             // setPortToolStripMenuItem
             // 
             this.setPortToolStripMenuItem.Name = "setPortToolStripMenuItem";
-            this.setPortToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.setPortToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.setPortToolStripMenuItem.Text = "set port";
             this.setPortToolStripMenuItem.Click += new System.EventHandler(this.setPortToolStripMenuItem_Click);
             // 
@@ -121,7 +112,7 @@
             this.ledNoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctms_led_no});
             this.ledNoToolStripMenuItem.Name = "ledNoToolStripMenuItem";
-            this.ledNoToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.ledNoToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.ledNoToolStripMenuItem.Text = "led no.";
             // 
             // ctms_led_no
@@ -136,7 +127,7 @@
             this.flagtestToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctms_flag_test});
             this.flagtestToolStripMenuItem.Name = "flagtestToolStripMenuItem";
-            this.flagtestToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.flagtestToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.flagtestToolStripMenuItem.Text = "flag_test";
             // 
             // ctms_flag_test
@@ -152,7 +143,7 @@
             this.frameHeightToolStripMenuItem,
             this.frameWidthToolStripMenuItem});
             this.frameToolStripMenuItem.Name = "frameToolStripMenuItem";
-            this.frameToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.frameToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.frameToolStripMenuItem.Text = "frame";
             // 
             // frameHeightToolStripMenuItem
@@ -191,100 +182,46 @@
             this.onebyone.CheckOnClick = true;
             this.onebyone.CheckState = System.Windows.Forms.CheckState.Checked;
             this.onebyone.Name = "onebyone";
-            this.onebyone.Size = new System.Drawing.Size(237, 22);
+            this.onebyone.Size = new System.Drawing.Size(160, 22);
             this.onebyone.Text = "1 head 1 camera";
             this.onebyone.Click += new System.EventHandler(this.onebyone_Click);
             // 
-            // setSaturationAddressInCSVToolStripMenuItem
+            // setToolStripMenuItem
             // 
-            this.setSaturationAddressInCSVToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ctms_setSaturationAddressCsv,
-            this.ctms_setSaturationAddress});
-            this.setSaturationAddressInCSVToolStripMenuItem.Name = "setSaturationAddressInCSVToolStripMenuItem";
-            this.setSaturationAddressInCSVToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.setSaturationAddressInCSVToolStripMenuItem.Text = "Set Saturation (Address in CSV)";
+            this.setToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctms_propertySetup,
+            this.ctms_propertySave});
+            this.setToolStripMenuItem.Name = "setToolStripMenuItem";
+            this.setToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.setToolStripMenuItem.Text = "Property Setting";
             // 
-            // ctms_setSaturationAddressCsv
+            // ctms_propertySetup
             // 
-            this.ctms_setSaturationAddressCsv.Name = "ctms_setSaturationAddressCsv";
-            this.ctms_setSaturationAddressCsv.Size = new System.Drawing.Size(180, 22);
-            this.ctms_setSaturationAddressCsv.Text = "100";
-            this.ctms_setSaturationAddressCsv.Click += new System.EventHandler(this.ctms_setSaturationAddressCsv_Click);
+            this.ctms_propertySetup.Name = "ctms_propertySetup";
+            this.ctms_propertySetup.Size = new System.Drawing.Size(180, 22);
+            this.ctms_propertySetup.Text = "Setup";
+            this.ctms_propertySetup.Click += new System.EventHandler(this.ctms_propertySetup_Click);
             // 
-            // ctms_setSaturationAddress
+            // ctms_propertySave
             // 
-            this.ctms_setSaturationAddress.Name = "ctms_setSaturationAddress";
-            this.ctms_setSaturationAddress.Size = new System.Drawing.Size(180, 22);
-            this.ctms_setSaturationAddress.Text = "Set";
-            this.ctms_setSaturationAddress.Click += new System.EventHandler(this.ctms_setSaturationAddress_Click);
-            // 
-            // ctms_setGainAddress_
-            // 
-            this.ctms_setGainAddress_.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ctms_setGainAddressCsv,
-            this.ctms_setGainAddress});
-            this.ctms_setGainAddress_.Name = "ctms_setGainAddress_";
-            this.ctms_setGainAddress_.Size = new System.Drawing.Size(237, 22);
-            this.ctms_setGainAddress_.Text = "Set Gain (Address in CSV)";
-            // 
-            // ctms_setGainAddressCsv
-            // 
-            this.ctms_setGainAddressCsv.Name = "ctms_setGainAddressCsv";
-            this.ctms_setGainAddressCsv.Size = new System.Drawing.Size(180, 22);
-            this.ctms_setGainAddressCsv.Text = "100";
-            this.ctms_setGainAddressCsv.Click += new System.EventHandler(this.ctms_setGainAddressCsv_Click);
-            // 
-            // ctms_setGainAddress
-            // 
-            this.ctms_setGainAddress.Name = "ctms_setGainAddress";
-            this.ctms_setGainAddress.Size = new System.Drawing.Size(180, 22);
-            this.ctms_setGainAddress.Text = "Set";
-            this.ctms_setGainAddress.Click += new System.EventHandler(this.ctms_setGainAddress_Click);
-            // 
-            // setGammaAddressInCSVToolStripMenuItem
-            // 
-            this.setGammaAddressInCSVToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ctms_setGammaAddressCsv,
-            this.ctms_setGammaAddress,
-            this.ctms_propertySetting});
-            this.setGammaAddressInCSVToolStripMenuItem.Name = "setGammaAddressInCSVToolStripMenuItem";
-            this.setGammaAddressInCSVToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.setGammaAddressInCSVToolStripMenuItem.Text = "Set Gamma (Address in CSV)";
-            // 
-            // ctms_setGammaAddressCsv
-            // 
-            this.ctms_setGammaAddressCsv.Name = "ctms_setGammaAddressCsv";
-            this.ctms_setGammaAddressCsv.Size = new System.Drawing.Size(180, 22);
-            this.ctms_setGammaAddressCsv.Text = "100";
-            this.ctms_setGammaAddressCsv.Click += new System.EventHandler(this.ctms_setGammaAddressCsv_Click);
-            // 
-            // ctms_setGammaAddress
-            // 
-            this.ctms_setGammaAddress.Name = "ctms_setGammaAddress";
-            this.ctms_setGammaAddress.Size = new System.Drawing.Size(180, 22);
-            this.ctms_setGammaAddress.Text = "Set";
-            this.ctms_setGammaAddress.Click += new System.EventHandler(this.ctms_setGammaAddress_Click);
-            // 
-            // ctms_propertySetting
-            // 
-            this.ctms_propertySetting.Name = "ctms_propertySetting";
-            this.ctms_propertySetting.Size = new System.Drawing.Size(180, 22);
-            this.ctms_propertySetting.Text = "Property Setting";
-            this.ctms_propertySetting.Click += new System.EventHandler(this.ctms_propertySetting_Click);
+            this.ctms_propertySave.Name = "ctms_propertySave";
+            this.ctms_propertySave.Size = new System.Drawing.Size(180, 22);
+            this.ctms_propertySave.Text = "Save";
+            this.ctms_propertySave.Click += new System.EventHandler(this.ctms_propertySave_Click);
             // 
             // versionToolStripMenuItem
             // 
             this.versionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.v202202ToolStripMenuItem});
             this.versionToolStripMenuItem.Name = "versionToolStripMenuItem";
-            this.versionToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.versionToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.versionToolStripMenuItem.Text = "Version";
             // 
             // v202202ToolStripMenuItem
             // 
             this.v202202ToolStripMenuItem.Name = "v202202ToolStripMenuItem";
-            this.v202202ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.v202202ToolStripMenuItem.Text = "V2022.03";
+            this.v202202ToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
+            this.v202202ToolStripMenuItem.Text = "V2023.01";
             // 
             // Form1
             // 
@@ -327,16 +264,9 @@
         private System.Windows.Forms.ToolStripMenuItem ctms_flag_test;
         private System.Windows.Forms.ToolStripMenuItem versionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem v202202ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem setSaturationAddressInCSVToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setSaturationAddressCsv;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setSaturationAddress;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setGainAddress_;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setGainAddressCsv;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setGainAddress;
-        private System.Windows.Forms.ToolStripMenuItem setGammaAddressInCSVToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setGammaAddressCsv;
-        private System.Windows.Forms.ToolStripMenuItem ctms_setGammaAddress;
-        private System.Windows.Forms.ToolStripMenuItem ctms_propertySetting;
+        private System.Windows.Forms.ToolStripMenuItem setToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ctms_propertySetup;
+        private System.Windows.Forms.ToolStripMenuItem ctms_propertySave;
     }
 }
 

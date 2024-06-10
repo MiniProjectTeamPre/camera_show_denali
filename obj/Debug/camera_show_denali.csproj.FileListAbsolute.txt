@@ -34,3 +34,16 @@ D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\came
 D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.exe
 D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.pdb
 D:\ServerSvn\Projects C#\mini_projeck_template\camera_show_denali\obj\Debug\camera_show_denali.KeyPassword.resources
+C:\Users\anocha\Desktop\New folder\camera_show_denali\bin\Debug\camera_show_denali.exe.config
+C:\Users\anocha\Desktop\New folder\camera_show_denali\bin\Debug\camera_show_denali.exe
+C:\Users\anocha\Desktop\New folder\camera_show_denali\bin\Debug\camera_show_denali.pdb
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.csproj.AssemblyReference.cache
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.csproj.SuggestedBindingRedirects.cache
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.Form1.resources
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.KeyPassword.resources
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.Properties.Resources.resources
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.csproj.GenerateResource.cache
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.csproj.CoreCompileInputs.cache
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.csproj.CopyComplete
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.exe
+C:\Users\anocha\Desktop\New folder\camera_show_denali\obj\Debug\camera_show_denali.pdb

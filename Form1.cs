@@ -30,7 +30,6 @@ namespace camera_show_denali {
         private bool flag_set_camera = false;
         private bool steptest_fail = false;
         private int crop = 30;
-        private bool steptest_camera_read2d_flag = false;
         private bool steptest_camera_check_led_red_green = false;
         private Bgr bgr_low;
         private Bgr bgr_high;
@@ -47,101 +46,96 @@ namespace camera_show_denali {
         private string flag_set_port = "";
         private bool flag_add_step = false;
         private VideoCapture.API captureApi = VideoCapture.API.Any;
-        /// <summary>
-        /// For define select address of config gamma and gain and saturation
-        /// </summary>
-        private string address = string.Empty;
 
         public Form1() {
             InitializeComponent();
-            head = File.ReadAllText("../../config/head.txt");
+            head = File.ReadAllText("../../config_cameraDenali/head.txt");
             File.WriteAllText("call_exe_tric.txt", "");
-            try { flag_set_port = File.ReadAllText("set_port.txt"); } catch { }
-            try { flag_add_step = Convert.ToBoolean(File.ReadAllText("add_step.txt")); } catch { }
+            try
+            { flag_set_port = File.ReadAllText("set_port.txt"); } catch { }
+            try
+            { flag_add_step = Convert.ToBoolean(File.ReadAllText("add_step.txt")); } catch { }
             File.Delete("add_step.txt");
-            try { steptest = File.ReadAllText("../../config/test_head_" + head + "_steptest.txt"); } catch { }
-            if (steptest.Contains("read2d")) {
-                steptest_camera_read2d_flag = true;
-            }
-            ReadFileAddress();
+            try
+            { steptest = File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_steptest.txt"); } catch { }
             ComputerInfo computerInfo = new ComputerInfo();
-            if (!computerInfo.OSFullName.Contains("Windows 7")) captureApi = VideoCapture.API.DShow;
-            if (flag_set_port == "set port") {
+            if (!computerInfo.OSFullName.Contains("Windows 7"))
+                captureApi = VideoCapture.API.DShow;
+            if (flag_set_port == "set port")
+            {
                 File.Delete("set_port.txt");
                 head = File.ReadAllText("camera_head_set_port.txt");
                 Form f2 = new Form();
                 f2.Size = new Size(100, 100);
                 ComboBox c = new ComboBox();
                 c.Size = new Size(60, 7);
-                for (int i = 0; i < 9; i++) {
+                for (int i = 0; i < 9; i++)
+                {
                     capture = new VideoCapture(i, captureApi);
-                    if (capture.Width != 0) c.Items.Add(i);
+                    if (capture.Width != 0)
+                        c.Items.Add(i);
                     capture.Dispose();
                 }
                 f2.Controls.Add(c);
                 f2.ShowDialog();
                 bool flag_onebyone_check = false;
-                try { flag_onebyone_check = Convert.ToBoolean(File.ReadAllText("../../config/camera_show_onebyone" + ".txt")); } catch { }
-                if (flag_onebyone_check) {
-                    File.WriteAllText("../../config/test_head_" + head + "_port.txt", c.Text);
-                    File.WriteAllText("../../config/test_head_" + head + "_port_read2d.txt", c.Text);
-                } else {
-                    if (steptest_camera_read2d_flag == true) File.WriteAllText("../../config/test_head_" + head + "_port_read2d.txt", c.Text);
-                    else File.WriteAllText("../../config/test_head_" + head + "_port.txt", c.Text);
+                try
+                { flag_onebyone_check = Convert.ToBoolean(File.ReadAllText("../../config_cameraDenali/camera_show_onebyone" + ".txt")); } catch { }
+                if (flag_onebyone_check)
+                {
+                    File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_port.txt", c.Text);
+                }
+                else
+                {
+                    File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_port.txt", c.Text);
                 }
                 capture = new VideoCapture(Convert.ToInt32(c.Text), captureApi);
-            } else {
+            }
+            else
+            {
                 bool flag_while = true;
-                if (steptest_camera_read2d_flag == true) {
-                    try { string ppp = File.ReadAllText("../../config/test_head_" + head + "_port_read2d.txt"); } catch (Exception) { flag_while = false; }
-                } else {
-                    try { string ppp = File.ReadAllText("../../config/test_head_" + head + "_port.txt"); } catch (Exception) { flag_while = false; }
+
+                try
+                {
+                    string ppp = File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_port.txt");
+                } catch (Exception)
+                {
+                    flag_while = false;
                 }
-                if (flag_while == false) { MessageBox.Show("_กรุณาเลือก port camera"); capture = new VideoCapture(); }
+
+                if (flag_while == false)
+                { MessageBox.Show("_กรุณาเลือก port camera"); capture = new VideoCapture(); }
                 show_form_cancel_camera();
                 Stopwatch timeout_opencam = new Stopwatch();
                 timeout_opencam.Restart();
-                while (flag_while) {
+                while (flag_while)
+                {
                     //if (timeout_opencam.ElapsedMilliseconds > 5000) { capture = new VideoCapture(); break; }
-                    if (f_cancel_camera.IsDisposed) { Application.Exit(); return; }
-                    try {
+                    if (f_cancel_camera.IsDisposed)
+                    { Application.Exit(); return; }
+                    try
+                    {
                         string ff = File.ReadAllText("camera_show_list.txt");
-                        if (ff == "") break;
-                        if (ff.Substring(0, 1) != head) { Thread.Sleep(50); DelaymS(50); continue; }
+                        if (ff == "")
+                            break;
+                        if (ff.Substring(0, 1) != head)
+                        { Thread.Sleep(50); DelaymS(50); continue; }
                     } catch { Thread.Sleep(50); DelaymS(50); continue; }
                     break;
                 }
-                while (flag_while) {
+                while (flag_while)
+                {
                     //if (timeout_opencam.ElapsedMilliseconds > 5000) { capture = new VideoCapture(); break; }
-                    if (f_cancel_camera.IsDisposed) { Application.Exit(); return; }
-                    try {
-                        if (steptest_camera_read2d_flag == true) capture = new VideoCapture(Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_port_read2d.txt")), captureApi);
-                        else capture = new VideoCapture(Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_port.txt")), captureApi);
-                        if (address == Address.gamma)
-                        {
-                            int gammaCsv = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_gamma_" + steptest + ".txt"));
-                            if (!CheckAddressCamera(gammaCsv))
-                            {
-                                ScanAddressCamera(gammaCsv);
-                            }
-                        }
-                        else if (address == Address.saturation)
-                        {
-                            int saturationCsv = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_saturation_" + steptest + ".txt"));
-                            if (!CheckAddressCamera(saturationCsv))
-                            {
-                                ScanAddressCamera(saturationCsv);
-                            }
-                        }
-                        else
-                        {
-                            int gainCsv = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_gain_" + steptest + ".txt"));
-                            if (!CheckAddressCamera(gainCsv))
-                            {
-                                ScanAddressCamera(gainCsv);
-                            }
-                        }
-                        if (capture == null || capture.Ptr == IntPtr.Zero || capture.Width == 0) { DelaymS(50); Thread.Sleep(200); continue; }
+                    if (f_cancel_camera.IsDisposed)
+                    { Application.Exit(); return; }
+                    try
+                    {
+                        string pathDAFSD = "../../config_cameraDenali/test_head_" + head + "_port.txt";
+                        int asddas = Convert.ToInt32(File.ReadAllText(pathDAFSD));
+                        capture = new VideoCapture(asddas, captureApi);
+
+                        if (capture == null || capture.Ptr == IntPtr.Zero || capture.Width == 0)
+                        { DelaymS(50); Thread.Sleep(200); continue; }
                         break;
                     } catch { Thread.Sleep(50); }
                     DelaymS(50);
@@ -150,12 +144,16 @@ namespace camera_show_denali {
                 timeout_opencam.Stop();
                 f_cancel_camera.Close();
             }
-            if (steptest.Contains("check_led")) {
+            if (steptest.Contains("check_led"))
+            {
                 steptest_camera_check_led_red_green = true;
             }
-            if (steptest_camera_check_led_red_green == true) {
+            if (steptest_camera_check_led_red_green == true)
+            {
                 Application.Idle += check_led;
-            } else {
+            }
+            else
+            {
                 MessageBox.Show("steptest.txt error : สเต็ปเทสที่ส่งเข้ามาในไฟล์ ไม่ตรงกับ ในตัวโปรแกรม camera.exe");
                 File.WriteAllText("test_head_" + head + "_result.txt", "function\r\nFail");
                 steptest_fail = true;
@@ -195,60 +193,76 @@ namespace camera_show_denali {
         }
 
         private void setup() {
-            if (flag_led_test == 1) {
-                if (flag_add_step) {
-                    try { Frame_height.Text = File.ReadAllText("../../config/test_head_" + head + "_frame_height_" + steptest.Substring(0, steptest.Length - 1) + ".txt"); } catch { }
-                    try { Frame_width.Text = File.ReadAllText("../../config/test_head_" + head + "_frame_width_" + steptest.Substring(0, steptest.Length - 1) + ".txt"); } catch { }
-                } else {
-                    try { Frame_height.Text = File.ReadAllText("../../config/test_head_" + head + "_frame_height_" + steptest + ".txt"); } catch { }
-                    try { Frame_width.Text = File.ReadAllText("../../config/test_head_" + head + "_frame_width_" + steptest + ".txt"); } catch { }
+            if (flag_led_test == 1)
+            {
+                if (flag_add_step)
+                {
+                    try
+                    { Frame_height.Text = File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_frame_height_" + steptest.Substring(0, steptest.Length - 1) + ".txt"); } catch { }
+                    try
+                    { Frame_width.Text = File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_frame_width_" + steptest.Substring(0, steptest.Length - 1) + ".txt"); } catch { }
                 }
-                try {
+                else
+                {
+                    try
+                    { Frame_height.Text = File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_frame_height_" + steptest + ".txt"); } catch { }
+                    try
+                    { Frame_width.Text = File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_frame_width_" + steptest + ".txt"); } catch { }
+                }
+                try
+                {
                     SetCapture(CapProp.FrameHeight, Convert.ToInt32(Frame_height.Text));//800
                     SetCapture(CapProp.FrameWidth, Convert.ToInt32(Frame_width.Text));//600
-                    SetCapture(CapProp.Zoom, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_zoom_" + steptest + ".txt")));
-                    SetCapture(CapProp.Pan, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_pan_" + steptest + ".txt")));
-                    SetCapture(CapProp.Tilt, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_tilt_" + steptest + ".txt")));
-                    SetCapture(CapProp.Contrast, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_contrast_" + steptest + ".txt")));
-                    SetCapture(CapProp.Brightness, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_brightness_" + steptest + ".txt")));
-                    SetCapture(CapProp.Focus, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_focus_" + steptest + ".txt")));
-                    SetCapture(CapProp.Exposure, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_exposure_" + steptest + ".txt")));
-                    //SetCapture(CapProp.Saturation, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_saturation_" + steptest + ".txt")));
-                    SetCapture(CapProp.Sharpness, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_sharpness_" + steptest + ".txt")));
-                    //SetCapture(CapProp.Gain, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_gain_" + steptest + ".txt")));
-                    //SetCapture(CapProp.Gamma, Convert.ToDouble(File.ReadAllText("../../config/test_head_" + head + "_gamma_" + steptest + ".txt")));
+                    SetCapture(CapProp.Zoom, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_zoom_" + steptest + ".txt")));
+                    SetCapture(CapProp.Pan, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_pan_" + steptest + ".txt")));
+                    SetCapture(CapProp.Tilt, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_tilt_" + steptest + ".txt")));
+                    SetCapture(CapProp.Contrast, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_contrast_" + steptest + ".txt")));
+                    SetCapture(CapProp.Brightness, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_brightness_" + steptest + ".txt")));
+                    SetCapture(CapProp.Focus, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_focus_" + steptest + ".txt")));
+                    SetCapture(CapProp.Exposure, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_exposure_" + steptest + ".txt")));
+                    SetCapture(CapProp.Saturation, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_saturation_" + steptest + ".txt")));
+                    SetCapture(CapProp.Sharpness, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_sharpness_" + steptest + ".txt")));
+                    SetCapture(CapProp.Gain, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_gain_" + steptest + ".txt")));
+                    SetCapture(CapProp.Gamma, Convert.ToDouble(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_gamma_" + steptest + ".txt")));
                 } catch { }
-                try { process_value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_process_" + steptest + ".txt")); } catch { }
-                try { flag_process = Convert.ToBoolean(File.ReadAllText("../../config/test_head_" + head + "_flag_process_" + steptest + ".txt")); } catch { }
-                try { debug = Convert.ToBoolean(File.ReadAllText("../../config/test_head_" + head + "_debug.txt")); } catch { }
-                try { time_out = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_timeout.txt")); } catch { }
-                try { onebyone.Checked = Convert.ToBoolean(File.ReadAllText("../../config/camera_show_onebyone" + ".txt")); } catch { }
+                try
+                { process_value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_process_" + steptest + ".txt")); } catch { }
+                try
+                { flag_process = Convert.ToBoolean(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_flag_process_" + steptest + ".txt")); } catch { }
+                try
+                { debug = Convert.ToBoolean(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_debug.txt")); } catch { }
+                try
+                { time_out = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_timeout.txt")); } catch { }
+                try
+                { onebyone.Checked = Convert.ToBoolean(File.ReadAllText("../../config_cameraDenali/camera_show_onebyone" + ".txt")); } catch { }
             }
 
             string mjh = "";
-            try { if (ctms_led_no.Text == "2") mjh = "_2"; } catch { }
-            try { rect.X = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_rect_x_" + steptest + mjh + ".txt")); } catch { }
-            try { rect.Y = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_rect_y_" + steptest + mjh + ".txt")); } catch { }
-            try { rect.Width = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_rect_width_" + steptest + mjh + ".txt")); } catch { }
-            try { rect.Height = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_rect_height_" + steptest + mjh + ".txt")); } catch { }
             try
-            { ctms_setGammaAddressCsv.Text = File.ReadAllText("../../config/test_head_" + head + "_gamma_" + steptest + ".txt"); } catch { }
+            { if (ctms_led_no.Text == "2") mjh = "_2"; } catch { }
             try
-            { ctms_setGainAddressCsv.Text = File.ReadAllText("../../config/test_head_" + head + "_gain_" + steptest + ".txt"); } catch { }
+            { rect.X = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_rect_x_" + steptest + mjh + ".txt")); } catch { }
             try
-            { ctms_setSaturationAddressCsv.Text = File.ReadAllText("../../config/test_head_" + head + "_saturation_" + steptest + ".txt"); } catch { }
+            { rect.Y = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_rect_y_" + steptest + mjh + ".txt")); } catch { }
+            try
+            { rect.Width = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_rect_width_" + steptest + mjh + ".txt")); } catch { }
+            try
+            { rect.Height = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_rect_height_" + steptest + mjh + ".txt")); } catch { }
             try
             {
-                if (flag_led_test == 1 || flag_led_test == 4) {//แดง 0 60 0 255 150 255
+                if (flag_led_test == 1 || flag_led_test == 4)
+                {//แดง 0 60 0 255 150 255
                     hsv_low = new Hsv(0, 0, 150);
                     hsv_high = new Hsv(60, 255, 255);
                 }
-                if (flag_led_test == 2 || flag_led_test == 5) {//เขียว 70 100 100 255 0 50
+                if (flag_led_test == 2 || flag_led_test == 5)
+                {//เขียว 70 100 100 255 0 50
                     bgr_low = new Bgr(0, 100, 0);
                     bgr_high = new Bgr(100, 150, 50);
                 }
-                if (flag_led_test == 3 || flag_led_test == 6) {//น้ำเงิน 200 210 0 50 0 50
-                                                               //น้ำเงิน 120 220 0 50 0 50 เครื่อง1
+                if (flag_led_test == 3 || flag_led_test == 6)
+                {//น้ำเงิน 200 210 0 50 0 50
+                 //น้ำเงิน 120 220 0 50 0 50 เครื่อง1
                     bgr_low = new Bgr(120, 0, 0);
                     bgr_high = new Bgr(220, 50, 50);
                 }
@@ -261,11 +275,13 @@ namespace camera_show_denali {
         }
 
         private void Form1_Load(object sender, EventArgs e) {
-            if (steptest_fail == true) this.Close();
+            if (steptest_fail == true)
+                this.Close();
         }
 
         private void fail_check_led() {
-            if (debug == true) { timeout.Restart(); return; }
+            if (debug == true)
+            { timeout.Restart(); return; }
             File.WriteAllText("test_head_" + head + "_result.txt", "time over\r\nFAIL");
             this.Close();
         }
@@ -274,21 +290,29 @@ namespace camera_show_denali {
         private bool flag_return = false;
         private bool flag_first_test = false;
         private void check_led(object sender, EventArgs e) {
-            if (!flag_first_test) {
+            if (!flag_first_test)
+            {
                 flag_first_test = true;
                 this.Activate();
-                if (Form.ActiveForm != this) {
+                if (Form.ActiveForm != this)
+                {
                     this.WindowState = FormWindowState.Minimized;
                     this.WindowState = FormWindowState.Normal;
                 }
             }
-            
-            if (flag_return) { flag_return = false; timeout.Restart(); }
-            if (timeout.ElapsedMilliseconds >= time_out) { fail_check_led(); if (debug == false) return; }
-            if (IsMouseDown == true) return;
-            if (capture == null || capture.Ptr == IntPtr.Zero || capture.Width == 0) {
-                try { capture.Dispose(); } catch { }
-                try { capture = new VideoCapture(Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_port.txt")), captureApi); } catch { }
+
+            if (flag_return)
+            { flag_return = false; timeout.Restart(); }
+            if (timeout.ElapsedMilliseconds >= time_out)
+            { fail_check_led(); if (debug == false) return; }
+            if (IsMouseDown == true)
+                return;
+            if (capture == null || capture.Ptr == IntPtr.Zero || capture.Width == 0)
+            {
+                try
+                { capture.Dispose(); } catch { }
+                try
+                { capture = new VideoCapture(Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_port.txt")), captureApi); } catch { }
                 Thread.Sleep(250);
                 this.Size = new Size(capture.Width, capture.Height);
                 pictureBox1.Size = new Size(capture.Width, capture.Height);
@@ -297,42 +321,59 @@ namespace camera_show_denali {
                 return;
             }
             Mat frame;
-            try {
-                if (flag_hsv_test == false) frame = capture.QueryFrame();
-                else frame = new Mat("../../config/hsv_test.png");
+            try
+            {
+                if (flag_hsv_test == false)
+                    frame = capture.QueryFrame();
+                else
+                    frame = new Mat("../../config_cameraDenali/hsv_test.png");
                 img = frame.ToImage<Bgr, Byte>();
                 img_hsv = frame.ToImage<Hsv, Byte>();
-            } catch {
+            } catch
+            {
                 MessageBox.Show("ไม่สามารถเปิดกล้องได้");
                 Application.Exit();
                 return;
             }
             int redpixels = 0;
-            if (flag_led_test == 1 || flag_led_test == 4) {//แดง
+            if (flag_led_test == 1 || flag_led_test == 4)
+            {//แดง
                 Graphics g = Graphics.FromImage(img.Bitmap);
                 g.DrawRectangle(Pens.Red, rect);
                 Image<Hsv, byte> img_cut2 = null;
                 Image<Hsv, byte> img2 = null;
                 img_cut2 = img_hsv.Copy();
-                try { img_cut2.ROI = rect; } catch { }
+                try
+                { img_cut2.ROI = rect; } catch { }
                 img2 = img_cut2.Copy();
-                try { redpixels = img2.InRange(hsv_low, hsv_high).CountNonzero()[0]; } catch { }
-            } else {//เขียว //น้ำเงิน
+                try
+                { redpixels = img2.InRange(hsv_low, hsv_high).CountNonzero()[0]; } catch { }
+            }
+            else
+            {//เขียว //น้ำเงิน
                 Graphics g = Graphics.FromImage(img.Bitmap);
-                if (flag_led_test == 2 || flag_led_test == 5) g.DrawRectangle(Pens.Lime, rect);
-                else g.DrawRectangle(Pens.Blue, rect);
+                if (flag_led_test == 2 || flag_led_test == 5)
+                    g.DrawRectangle(Pens.Lime, rect);
+                else
+                    g.DrawRectangle(Pens.Blue, rect);
                 Image<Bgr, byte> img_cut = null;
                 Image<Bgr, byte> img1 = null;
                 img_cut = img.Copy();
-                try { img_cut.ROI = rect; } catch { }
+                try
+                { img_cut.ROI = rect; } catch { }
                 img1 = img_cut.Copy();
-                try { redpixels = img1.InRange(bgr_low, bgr_high).CountNonzero()[0]; } catch { }
+                try
+                { redpixels = img1.InRange(bgr_low, bgr_high).CountNonzero()[0]; } catch { }
             }
             bool mask = false;
-            if (redpixels >= hsv_mask) {
+            if (redpixels >= hsv_mask)
+            {
                 timeout.Restart();
-                if (stopwatch_hsv_timeout.ElapsedMilliseconds >= hsv_timeout) mask = true;
-            } else {
+                if (stopwatch_hsv_timeout.ElapsedMilliseconds >= hsv_timeout)
+                    mask = true;
+            }
+            else
+            {
                 stopwatch_hsv_timeout.Restart();
                 mask = false;
             }
@@ -340,12 +381,16 @@ namespace camera_show_denali {
             CvInvoke.PutText(img, mask.ToString(), new Point(20, 60), FontFace.HersheySimplex, 0.5, new MCvScalar(0, 0, 255), 2);
             CvInvoke.PutText(img, stopwatch_hsv_timeout.ElapsedMilliseconds.ToString(), new Point(pictureBox1.Size.Width - 100, 30), FontFace.HersheySimplex, 0.5, new MCvScalar(0, 0, 255), 2);
             pictureBox1.Image = img.Bitmap;
-            if (mask == true) {
-                if (flag_set_camera == false && debug == false) {
-                    if (flag_led_test != 7) {
+            if (mask == true)
+            {
+                if (flag_set_camera == false && debug == false)
+                {
+                    if (flag_led_test != 7)
+                    {
                         flag_led_test++;
                         ctms_flag_test.Text = flag_led_test.ToString();
-                        if (flag_led_test == 4) ctms_led_no.Text = "2";
+                        if (flag_led_test == 4)
+                            ctms_led_no.Text = "2";
                         setup();
                         timeout.Restart();
                         return;
@@ -356,16 +401,23 @@ namespace camera_show_denali {
                 }
                 flag_result = true;
                 result_blackup = "Color detected";
-            } else {
+            }
+            else
+            {
                 flag_result = false;
             }
         }
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (flag_result == true) {
-                if (steptest.Contains("image_compar")) File.WriteAllText("test_head_" + head + "_result.txt", result_blackup + "\r\nNEXT");
-                else File.WriteAllText("test_head_" + head + "_result.txt", result_blackup + "\r\nPASS");
-            } else {
+            if (flag_result == true)
+            {
+                if (steptest.Contains("image_compar"))
+                    File.WriteAllText("test_head_" + head + "_result.txt", result_blackup + "\r\nNEXT");
+                else
+                    File.WriteAllText("test_head_" + head + "_result.txt", result_blackup + "\r\nPASS");
+            }
+            else
+            {
                 File.WriteAllText("test_head_" + head + "_result.txt", "Unreadable\r\nFAIL");
             }
             this.Close();
@@ -393,114 +445,11 @@ namespace camera_show_denali {
             return true;
         }
         /// <summary>
-        /// Check address gamma camera in camera and in csv
-        /// </summary>
-        /// <param name="addressCsv">is gamma address in csv</param>
-        /// <returns>True is address success</returns>
-        private bool CheckAddressCamera(int addressCsv) {
-            if (address == Address.gamma)
-            {
-                double gamma = capture.GetCaptureProperty(CapProp.Gamma);
-                if (gamma == addressCsv)
-                {
-                    return true;
-                }
-                return false;
-            }
-            else if (address == Address.saturation)
-            {
-                double saturation = capture.GetCaptureProperty(CapProp.Saturation);
-                if (saturation == addressCsv)
-                {
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                double gain = capture.GetCaptureProperty(CapProp.Gain);
-                if (gain == addressCsv)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-        /// <summary>
-        /// Scan find address camera at same address in csv
-        /// </summary>
-        /// <param name="addressCsv">is gamma address in csv</param>
-        private void ScanAddressCamera(int addressCsv) {
-            for (int loop = 0; loop < 100; loop++)
-            {
-                try
-                {
-                    capture.Dispose();
-                } catch { }
-                if (loop == Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_port_read2d.txt")))
-                {
-                    continue;
-                }
-                capture = new VideoCapture(loop, captureApi);
-                if (capture.Width == 0)
-                {
-                    MessageBox.Show("Not find camera address " + address + "[" + addressCsv + "]");
-                    capture = new VideoCapture(0, captureApi);
-                    return;
-                }
-                if (!CheckAddressCamera(addressCsv))
-                {
-                    continue;
-                }
-                SetPortCameraFollowAddress(loop);
-                break;
-            }
-        }
-        /// <summary>
         /// Set new port camera follow address in csv
         /// </summary>
         /// <param name="portNew">is New port</param>
         private void SetPortCameraFollowAddress(int portNew) {
-            if (steptest_camera_read2d_flag == true)
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_port_read2d.txt", portNew.ToString());
-            }
-            else
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_port.txt", portNew.ToString());
-            }
-        }
-        /// <summary>
-        /// Read file set Address
-        /// </summary>
-        private void ReadFileAddress() {
-            address = Address.gamma;
-            if (steptest_camera_read2d_flag)
-            {
-                try
-                {
-                    address = File.ReadAllText("../../config/test_head_" + head + "_address_read2d.txt");
-                } catch { }
-            }
-            else
-            {
-                try
-                {
-                    address = File.ReadAllText("../../config/test_head_" + head + "_address.txt");
-                } catch { }
-            }
-            if (address == Address.gamma)
-            {
-                ctms_setGammaAddress.Checked = true;
-            }
-            else if (address == Address.saturation)
-            {
-                ctms_setSaturationAddress.Checked = true;
-            }
-            else
-            {
-                ctms_setGainAddress_.Checked = true;
-            }
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_port.txt", portNew.ToString());
         }
         /// <summary>
         /// For gen log error set camera capProp
@@ -644,7 +593,6 @@ namespace camera_show_denali {
             s_gamma = new Label();
             string str_read2d = "";
             bool flag_try_min_max_value = false;
-            if (steptest_camera_read2d_flag == true) str_read2d = "_read2d";
 
             l_zoom.Text = "zoom";
             l_zoom.Size = new Size(50, 15);
@@ -652,11 +600,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_zoom);
             h_zoom.Scroll += H_zoom_Scroll;
             h_zoom.LargeChange = 1;
-            try { h_zoom.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_zoom_min" + str_read2d + ".txt")); } catch (Exception) { h_zoom.Minimum = -999; }
-            try { h_zoom.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_zoom_max" + str_read2d + ".txt")); } catch (Exception) { h_zoom.Maximum = 999; }
-            try { h_zoom.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_zoom_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_zoom.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Zoom); } catch { }
+            try
+            { h_zoom.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_zoom_min" + str_read2d + ".txt")); } catch (Exception) { h_zoom.Minimum = -999; }
+            try
+            { h_zoom.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_zoom_max" + str_read2d + ".txt")); } catch (Exception) { h_zoom.Maximum = 999; }
+            try
+            { h_zoom.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_zoom_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_zoom.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Zoom); } catch { }
                 flag_try_min_max_value = false;
             }
             h_zoom.Size = new Size(300, h_zoom.Height);
@@ -673,11 +626,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_pan);
             h_pan.Scroll += H_pan_Scroll;
             h_pan.LargeChange = 1;
-            try { h_pan.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_pan_min" + str_read2d + ".txt")); } catch (Exception) { h_pan.Minimum = -999; }
-            try { h_pan.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_pan_max" + str_read2d + ".txt")); } catch (Exception) { h_pan.Maximum = 999; }
-            try { h_pan.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_pan_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_pan.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Pan); } catch { }
+            try
+            { h_pan.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_pan_min" + str_read2d + ".txt")); } catch (Exception) { h_pan.Minimum = -999; }
+            try
+            { h_pan.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_pan_max" + str_read2d + ".txt")); } catch (Exception) { h_pan.Maximum = 999; }
+            try
+            { h_pan.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_pan_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_pan.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Pan); } catch { }
                 flag_try_min_max_value = false;
             }
             h_pan.Size = new Size(300, h_pan.Height);
@@ -694,11 +652,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_tilt);
             h_tilt.Scroll += H_tilt_Scroll;
             h_tilt.LargeChange = 1;
-            try { h_tilt.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_tilt_min" + str_read2d + ".txt")); } catch (Exception) { h_tilt.Minimum = -999; }
-            try { h_tilt.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_tilt_max" + str_read2d + ".txt")); } catch (Exception) { h_tilt.Maximum = 999; }
-            try { h_tilt.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_tilt_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_tilt.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Tilt); } catch { }
+            try
+            { h_tilt.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_tilt_min" + str_read2d + ".txt")); } catch (Exception) { h_tilt.Minimum = -999; }
+            try
+            { h_tilt.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_tilt_max" + str_read2d + ".txt")); } catch (Exception) { h_tilt.Maximum = 999; }
+            try
+            { h_tilt.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_tilt_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_tilt.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Tilt); } catch { }
                 flag_try_min_max_value = false;
             }
             h_tilt.Size = new Size(300, h_tilt.Height);
@@ -715,11 +678,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_contrast);
             h_contrast.Scroll += H_contrast_Scroll;
             h_contrast.LargeChange = 1;
-            try { h_contrast.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_contrast_min" + str_read2d + ".txt")); } catch (Exception) { h_contrast.Minimum = -999; }
-            try { h_contrast.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_contrast_max" + str_read2d + ".txt")); } catch (Exception) { h_contrast.Maximum = 999; }
-            try { h_contrast.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_contrast_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_contrast.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast); } catch { }
+            try
+            { h_contrast.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_contrast_min" + str_read2d + ".txt")); } catch (Exception) { h_contrast.Minimum = -999; }
+            try
+            { h_contrast.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_contrast_max" + str_read2d + ".txt")); } catch (Exception) { h_contrast.Maximum = 999; }
+            try
+            { h_contrast.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_contrast_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_contrast.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Contrast); } catch { }
                 flag_try_min_max_value = false;
             }
             h_contrast.Size = new Size(300, h_contrast.Height);
@@ -736,11 +704,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_brightness);
             h_brightness.Scroll += H_brightness_Scroll;
             h_brightness.LargeChange = 1;
-            try { h_brightness.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_brightness_min" + str_read2d + ".txt")); } catch (Exception) { h_brightness.Minimum = -999; }
-            try { h_brightness.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_brightness_max" + str_read2d + ".txt")); } catch (Exception) { h_brightness.Maximum = 999; }
-            try { h_brightness.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_brightness_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_brightness.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness); } catch { }
+            try
+            { h_brightness.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_brightness_min" + str_read2d + ".txt")); } catch (Exception) { h_brightness.Minimum = -999; }
+            try
+            { h_brightness.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_brightness_max" + str_read2d + ".txt")); } catch (Exception) { h_brightness.Maximum = 999; }
+            try
+            { h_brightness.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_brightness_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_brightness.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Brightness); } catch { }
                 flag_try_min_max_value = false;
             }
             h_brightness.Size = new Size(300, h_brightness.Height);
@@ -757,11 +730,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_focus);
             h_focus.Scroll += H_focus_Scroll;
             h_focus.LargeChange = 1;
-            try { h_focus.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_focus_min" + str_read2d + ".txt")); } catch (Exception) { h_focus.Minimum = -999; }
-            try { h_focus.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_focus_max" + str_read2d + ".txt")); } catch (Exception) { h_focus.Maximum = 999; }
-            try { h_focus.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_focus_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_focus.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Focus); } catch { }
+            try
+            { h_focus.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_focus_min" + str_read2d + ".txt")); } catch (Exception) { h_focus.Minimum = -999; }
+            try
+            { h_focus.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_focus_max" + str_read2d + ".txt")); } catch (Exception) { h_focus.Maximum = 999; }
+            try
+            { h_focus.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_focus_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_focus.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Focus); } catch { }
                 flag_try_min_max_value = false;
             }
             h_focus.Size = new Size(300, h_focus.Height);
@@ -866,11 +844,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_exposure);
             h_exposure.Scroll += H_exposure_Scroll;
             h_exposure.LargeChange = 1;
-            try { h_exposure.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_exposure_min" + str_read2d + ".txt")); } catch (Exception) { h_exposure.Minimum = -999; }
-            try { h_exposure.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_exposure_max" + str_read2d + ".txt")); } catch (Exception) { h_exposure.Maximum = 999; }
-            try { h_exposure.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_exposure_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_exposure.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Exposure); } catch { }
+            try
+            { h_exposure.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_exposure_min" + str_read2d + ".txt")); } catch (Exception) { h_exposure.Minimum = -999; }
+            try
+            { h_exposure.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_exposure_max" + str_read2d + ".txt")); } catch (Exception) { h_exposure.Maximum = 999; }
+            try
+            { h_exposure.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_exposure_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_exposure.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Exposure); } catch { }
                 flag_try_min_max_value = false;
             }
             h_exposure.Size = new Size(300, h_exposure.Height);
@@ -887,9 +870,9 @@ namespace camera_show_denali {
             f1.Controls.Add(l_saturation);
             h_saturation.Scroll += H_saturation_Scroll;
             h_saturation.LargeChange = 1;
-            //try { h_saturation.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_saturation_min" + str_read2d + ".txt")); } catch (Exception) { h_saturation.Minimum = -999; }
-            //try { h_saturation.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_saturation_max" + str_read2d + ".txt")); } catch (Exception) { h_saturation.Maximum = 999; }
-            //try { h_saturation.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_saturation_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            //try { h_saturation.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_saturation_min" + str_read2d + ".txt")); } catch (Exception) { h_saturation.Minimum = -999; }
+            //try { h_saturation.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_saturation_max" + str_read2d + ".txt")); } catch (Exception) { h_saturation.Maximum = 999; }
+            //try { h_saturation.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_saturation_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
             h_saturation.Minimum = -999;
             h_saturation.Maximum = 999;
             try
@@ -911,11 +894,16 @@ namespace camera_show_denali {
             f1.Controls.Add(l_sharpness);
             h_sharpness.Scroll += H_sharpness_Scroll;
             h_sharpness.LargeChange = 1;
-            try { h_sharpness.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_sharpness_min" + str_read2d + ".txt")); } catch (Exception) { h_sharpness.Minimum = -999; }
-            try { h_sharpness.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_sharpness_max" + str_read2d + ".txt")); } catch (Exception) { h_sharpness.Maximum = 999; }
-            try { h_sharpness.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_sharpness_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
-            if (flag_try_min_max_value) {
-                try { h_sharpness.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness); } catch { }
+            try
+            { h_sharpness.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_sharpness_min" + str_read2d + ".txt")); } catch (Exception) { h_sharpness.Minimum = -999; }
+            try
+            { h_sharpness.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_sharpness_max" + str_read2d + ".txt")); } catch (Exception) { h_sharpness.Maximum = 999; }
+            try
+            { h_sharpness.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_sharpness_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            if (flag_try_min_max_value)
+            {
+                try
+                { h_sharpness.Value = (int)capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Sharpness); } catch { }
                 flag_try_min_max_value = false;
             }
             h_sharpness.Size = new Size(300, h_sharpness.Height);
@@ -932,9 +920,9 @@ namespace camera_show_denali {
             f1.Controls.Add(l_gain);
             h_gain.Scroll += H_gain_Scroll;
             h_gain.LargeChange = 1;
-            //try { h_gain.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_gain_min" + str_read2d + ".txt")); } catch (Exception) { h_gain.Minimum = -999; }
-            //try { h_gain.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_gain_max" + str_read2d + ".txt")); } catch (Exception) { h_gain.Maximum = 999; }
-            //try { h_gain.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_gain_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            //try { h_gain.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_gain_min" + str_read2d + ".txt")); } catch (Exception) { h_gain.Minimum = -999; }
+            //try { h_gain.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_gain_max" + str_read2d + ".txt")); } catch (Exception) { h_gain.Maximum = 999; }
+            //try { h_gain.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_gain_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
             h_gain.Minimum = -999;
             h_gain.Maximum = 999;
             try
@@ -956,9 +944,9 @@ namespace camera_show_denali {
             f1.Controls.Add(l_gamma);
             h_gamma.Scroll += H_gamma_Scroll;
             h_gamma.LargeChange = 1;
-            //try { h_gamma.Minimum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_gamma_min" + str_read2d + ".txt")); } catch (Exception) { h_gamma.Minimum = -999; }
-            //try { h_gamma.Maximum = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_cam_gamma_max" + str_read2d + ".txt")); } catch (Exception) { h_gamma.Maximum = 999; }
-            //try { h_gamma.Value = Convert.ToInt32(File.ReadAllText("../../config/test_head_" + head + "_gamma_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
+            //try { h_gamma.Minimum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_gamma_min" + str_read2d + ".txt")); } catch (Exception) { h_gamma.Minimum = -999; }
+            //try { h_gamma.Maximum = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_cam_gamma_max" + str_read2d + ".txt")); } catch (Exception) { h_gamma.Maximum = 999; }
+            //try { h_gamma.Value = Convert.ToInt32(File.ReadAllText("../../config_cameraDenali/test_head_" + head + "_gamma_" + steptest + ".txt")); } catch { flag_try_min_max_value = true; }
             h_gamma.Minimum = -999;
             h_gamma.Maximum = 999;
             try
@@ -981,46 +969,58 @@ namespace camera_show_denali {
         }
 
         private void T_timeout_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyValue != 13) return;
+            if (e.KeyValue != 13)
+                return;
             string cc = t_timeout.Text;
             int aa;
-            try {
+            try
+            {
                 aa = Convert.ToInt32(cc);
             } catch (Exception) { MessageBox.Show("not formath"); return; }
             hsv_timeout = aa;
         }
 
         private void T_hsv_mask_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyValue != 13) return;
+            if (e.KeyValue != 13)
+                return;
             string cc = t_hsv_mask.Text;
             int aa;
-            try {
+            try
+            {
                 aa = Convert.ToInt32(cc);
             } catch (Exception) { MessageBox.Show("not formath"); return; }
             hsv_mask = aa;
         }
 
         private void B_hsv_Click(object sender, EventArgs e) {
-            if (b_hsv.Text == "True") {
+            if (b_hsv.Text == "True")
+            {
                 b_hsv.Text = "False";
                 flag_hsv_test = false;
-            } else {
+            }
+            else
+            {
                 b_hsv.Text = "True";
                 flag_hsv_test = true;
             }
         }
 
         private void T_hsv_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyValue != 13) return;
+            if (e.KeyValue != 13)
+                return;
             string cc = t_hsv.Text;
             string[] zz;
             int[] xx = { 0, 0, 0, 0, 0, 0 };
-            try {
+            try
+            {
                 zz = cc.Split(' ');
             } catch (Exception) { MessageBox.Show("not formath"); return; }
-            if (zz.Length != 6) { MessageBox.Show("not formath"); return; }
-            try {
-                for (int i = 0; i < 6; i++) {
+            if (zz.Length != 6)
+            { MessageBox.Show("not formath"); return; }
+            try
+            {
+                for (int i = 0; i < 6; i++)
+                {
                     xx[i] = Convert.ToInt32(zz[i]);
                 }
             } catch (Exception) { MessageBox.Show("not formath"); return; }
@@ -1030,16 +1030,21 @@ namespace camera_show_denali {
         }
 
         private void T_bgr_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyValue != 13) return;
+            if (e.KeyValue != 13)
+                return;
             string cc = t_bgr.Text;
             string[] zz;
             int[] xx = { 0, 0, 0, 0, 0, 0 };
-            try {
+            try
+            {
                 zz = cc.Split(' ');
             } catch (Exception) { MessageBox.Show("not formath"); return; }
-            if (zz.Length != 6) { MessageBox.Show("not formath"); return; }
-            try {
-                for (int i = 0; i < 6; i++) {
+            if (zz.Length != 6)
+            { MessageBox.Show("not formath"); return; }
+            try
+            {
+                for (int i = 0; i < 6; i++)
+                {
                     xx[i] = Convert.ToInt32(zz[i]);
                 }
             } catch (Exception) { MessageBox.Show("not formath"); return; }
@@ -1049,10 +1054,13 @@ namespace camera_show_denali {
         }
 
         private void B_process_Click(object sender, EventArgs e) {
-            if (b_process.Text == "True") {
+            if (b_process.Text == "True")
+            {
                 b_process.Text = "False";
                 flag_process = false;
-            } else {
+            }
+            else
+            {
                 b_process.Text = "True";
                 flag_process = true;
             }
@@ -1065,7 +1073,8 @@ namespace camera_show_denali {
 
         private void B_focus_Click(object sender, EventArgs e) {
             SetCapture(CapProp.Autofocus, 1);
-            try { h_focus.Value = (int)capture.GetCaptureProperty(CapProp.Focus); } catch (Exception) { }
+            try
+            { h_focus.Value = (int)capture.GetCaptureProperty(CapProp.Focus); } catch (Exception) { }
             s_focus.Text = h_focus.Value.ToString();
         }
 
@@ -1085,20 +1094,21 @@ namespace camera_show_denali {
         }
 
         private void F1_FormClosed(object sender, FormClosedEventArgs e) {
-            File.WriteAllText("../../config/test_head_" + head + "_zoom_" + steptest + ".txt", h_zoom.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_pan_" + steptest + ".txt", h_pan.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_tilt_" + steptest + ".txt", h_tilt.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_contrast_" + steptest + ".txt", h_contrast.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_brightness_" + steptest + ".txt", h_brightness.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_focus_" + steptest + ".txt", h_focus.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_exposure_" + steptest + ".txt", h_exposure.Value.ToString());
-            //File.WriteAllText("../../config/test_head_" + head + "_saturation_" + steptest + ".txt", h_saturation.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_sharpness_" + steptest + ".txt", h_sharpness.Value.ToString());
-            //File.WriteAllText("../../config/test_head_" + head + "_gain_" + steptest + ".txt", h_gain.Value.ToString());
-            //File.WriteAllText("../../config/test_head_" + head + "_gamma_" + steptest + ".txt", h_gamma.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_process_" + steptest + ".txt", h_process.Value.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_flag_process_" + steptest + ".txt", flag_process.ToString());
-            if (steptest_camera_check_led_red_green == true) {
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_zoom_" + steptest + ".txt", h_zoom.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_pan_" + steptest + ".txt", h_pan.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_tilt_" + steptest + ".txt", h_tilt.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_contrast_" + steptest + ".txt", h_contrast.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_brightness_" + steptest + ".txt", h_brightness.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_focus_" + steptest + ".txt", h_focus.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_exposure_" + steptest + ".txt", h_exposure.Value.ToString());
+            //File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_saturation_" + steptest + ".txt", h_saturation.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_sharpness_" + steptest + ".txt", h_sharpness.Value.ToString());
+            //File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_gain_" + steptest + ".txt", h_gain.Value.ToString());
+            //File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_gamma_" + steptest + ".txt", h_gamma.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_process_" + steptest + ".txt", h_process.Value.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_flag_process_" + steptest + ".txt", flag_process.ToString());
+            if (steptest_camera_check_led_red_green == true)
+            {
 
             }
             flag_set_camera = false;
@@ -1145,7 +1155,8 @@ namespace camera_show_denali {
         }
 
         private void Show_all_Click(object sender, EventArgs e) {
-            if (show_all.Checked) {
+            if (show_all.Checked)
+            {
                 f1.Size = new Size(400, 600);
                 h_exposure.Visible = true;
                 l_exposure.Visible = true;
@@ -1162,7 +1173,9 @@ namespace camera_show_denali {
                 h_gamma.Visible = true;
                 l_gamma.Visible = true;
                 s_gamma.Visible = true;
-            } else {
+            }
+            else
+            {
                 f1.Size = new Size(400, 400);
                 h_exposure.Visible = false;
                 l_exposure.Visible = false;
@@ -1185,7 +1198,8 @@ namespace camera_show_denali {
         private static void DelaymS(int mS) {
             Stopwatch stopwatchDelaymS = new Stopwatch();
             stopwatchDelaymS.Restart();
-            while (mS > stopwatchDelaymS.ElapsedMilliseconds) {
+            while (mS > stopwatchDelaymS.ElapsedMilliseconds)
+            {
                 if (!stopwatchDelaymS.IsRunning)
                     stopwatchDelaymS.Start();
                 Application.DoEvents();
@@ -1197,42 +1211,51 @@ namespace camera_show_denali {
         Point StartLocation;
         Point EndLcation;
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e) {
-            if (!flag_set_camera) return;
-            if (e.Button != MouseButtons.Left) return;
+            if (!flag_set_camera)
+                return;
+            if (e.Button != MouseButtons.Left)
+                return;
             IsMouseDown = true;
             StartLocation = e.Location;
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e) {
-            if (IsMouseDown == true) {
+            if (IsMouseDown == true)
+            {
                 EndLcation = e.Location;
                 pictureBox1.Invalidate();
             }
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e) {
-            if (IsMouseDown != true) return;
-            if (rect.Size.Width < 30 || rect.Size.Height < 30) return;
+            if (IsMouseDown != true)
+                return;
+            if (rect.Size.Width < 30 || rect.Size.Height < 30)
+                return;
             Image<Bgr, byte> imgInput;
             EndLcation = e.Location;
             IsMouseDown = false;
-            if (steptest_camera_check_led_red_green == true) {
-                if (rect != null) {
+            if (steptest_camera_check_led_red_green == true)
+            {
+                if (rect != null)
+                {
                     imgInput = img.Copy();
                     imgInput.ROI = rect;
                     Image<Bgr, byte> temp = imgInput.Copy();
                 }
             }
             string mkmj = "";
-            if (ctms_led_no.Text == "2") mkmj = "_2";
-            File.WriteAllText("../../config/test_head_" + head + "_rect_x_" + steptest + mkmj + ".txt", rect.X.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_rect_y_" + steptest + mkmj + ".txt", rect.Y.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_rect_width_" + steptest + mkmj + ".txt", rect.Width.ToString());
-            File.WriteAllText("../../config/test_head_" + head + "_rect_height_" + steptest + mkmj + ".txt", rect.Height.ToString());
+            if (ctms_led_no.Text == "2")
+                mkmj = "_2";
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_rect_x_" + steptest + mkmj + ".txt", rect.X.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_rect_y_" + steptest + mkmj + ".txt", rect.Y.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_rect_width_" + steptest + mkmj + ".txt", rect.Width.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_rect_height_" + steptest + mkmj + ".txt", rect.Height.ToString());
         }
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e) {
-            if (rect != null && IsMouseDown == true) {
+            if (rect != null && IsMouseDown == true)
+            {
                 e.Graphics.DrawRectangle(Pens.Red, GetRectangle());
             }
         }
@@ -1261,9 +1284,12 @@ namespace camera_show_denali {
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-            try { capture.Dispose(); } catch { }
-            while (true) {
-                try {
+            try
+            { capture.Dispose(); } catch { }
+            while (true)
+            {
+                try
+                {
                     string ff = File.ReadAllText("camera_show_list.txt");
                     File.WriteAllText("camera_show_list.txt", ff.Trim().Replace(head, ""));
                     break;
@@ -1273,51 +1299,64 @@ namespace camera_show_denali {
 
         private void Frame_height_Click(object sender, EventArgs e) {
             int asd = 1;
-            while (true) {
+            while (true)
+            {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("_ใส่ frame height\r\ndefault = 800", "frame height", Frame_height.Text, 500, 300);
-                if (input == "") return;
-                try {
+                if (input == "")
+                    return;
+                try
+                {
                     asd = Convert.ToInt32(input);
-                } catch (Exception) {
+                } catch (Exception)
+                {
                     MessageBox.Show("not format");
                     continue;
                 }
                 break;
             }
             Frame_height.Text = asd.ToString();
-            File.WriteAllText("../../config/test_head_" + head + "_frame_height_" + steptest + ".txt", asd.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_frame_height_" + steptest + ".txt", asd.ToString());
         }
 
         private void Frame_width_Click(object sender, EventArgs e) {
             int asd = 1;
-            while (true) {
+            while (true)
+            {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("_ใส่ frame width\r\ndefault = 600", "frame width", Frame_width.Text, 500, 300);
-                if (input == "") return;
-                try {
+                if (input == "")
+                    return;
+                try
+                {
                     asd = Convert.ToInt32(input);
-                } catch (Exception) {
+                } catch (Exception)
+                {
                     MessageBox.Show("not format");
                     continue;
                 }
                 break;
             }
             Frame_width.Text = asd.ToString();
-            File.WriteAllText("../../config/test_head_" + head + "_frame_width_" + steptest + ".txt", asd.ToString());
+            File.WriteAllText("../../config_cameraDenali/test_head_" + head + "_frame_width_" + steptest + ".txt", asd.ToString());
         }
 
         private void onebyone_Click(object sender, EventArgs e) {
-            File.WriteAllText("../../config/camera_show_onebyone" + ".txt", onebyone.Checked.ToString());
+            File.WriteAllText("../../config_cameraDenali/camera_show_onebyone" + ".txt", onebyone.Checked.ToString());
         }
 
         private void ctms_led_no_Click(object sender, EventArgs e) {
             int asd = 1;
-            while (true) {
+            while (true)
+            {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("_ใส่ led no (1 - 2)", "led no", ctms_led_no.Text, 500, 300);
-                if (input == "") return;
-                try {
+                if (input == "")
+                    return;
+                try
+                {
                     asd = Convert.ToInt32(input);
-                    if (asd > 2 || asd < 1) throw new Exception();
-                } catch {
+                    if (asd > 2 || asd < 1)
+                        throw new Exception();
+                } catch
+                {
                     MessageBox.Show("not format");
                     continue;
                 }
@@ -1328,13 +1367,18 @@ namespace camera_show_denali {
 
         private void ctms_flag_test_Click(object sender, EventArgs e) {
             int asd = 1;
-            while (true) {
+            while (true)
+            {
                 string input = Microsoft.VisualBasic.Interaction.InputBox("_ใส่ flag_test (1 - 6)", "flag test", ctms_flag_test.Text, 500, 300);
-                if (input == "") return;
-                try {
+                if (input == "")
+                    return;
+                try
+                {
                     asd = Convert.ToInt32(input);
-                    if (asd > 6 || asd < 1) throw new Exception();
-                } catch {
+                    if (asd > 6 || asd < 1)
+                        throw new Exception();
+                } catch
+                {
                     MessageBox.Show("not format");
                     continue;
                 }
@@ -1345,7 +1389,13 @@ namespace camera_show_denali {
             setup();
         }
 
-        private void ctms_propertySetting_Click(object sender, EventArgs e) {
+        public static class Address {
+            public static readonly string gain = "Gain";
+            public static readonly string gamma = "Gamma";
+            public static readonly string saturation = "Saturation";
+        }
+
+        private void ctms_propertySetup_Click(object sender, EventArgs e) {
             if (!CheckPasswordSetAddress())
             {
                 return;
@@ -1353,121 +1403,41 @@ namespace camera_show_denali {
             SetCapture(CapProp.Settings, 0);
         }
 
-        private void ctms_setSaturationAddress_Click(object sender, EventArgs e) {
+        private void ctms_propertySave_Click(object sender, EventArgs e) {
             if (!CheckPasswordSetAddress())
             {
                 return;
             }
-            ctms_setGainAddress.Checked = false;
-            ctms_setGammaAddress.Checked = false;
-            ctms_setSaturationAddress.Checked = true;
-            if (steptest_camera_read2d_flag)
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_address_read2d.txt", Address.saturation);
-            }
-            else
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_address.txt", Address.saturation);
-            }
+            ReadConfigCameraToCsvFile();
         }
+        /// <summary>
+        /// For read value config camera current to csv
+        /// </summary>
+        private void ReadConfigCameraToCsvFile() {
+            double zoom = capture.GetCaptureProperty(CapProp.Zoom);
+            double pan = capture.GetCaptureProperty(CapProp.Pan);
+            double tilt = capture.GetCaptureProperty(CapProp.Tilt);
+            double contrast = capture.GetCaptureProperty(CapProp.Contrast);
+            double brightness = capture.GetCaptureProperty(CapProp.Brightness);
+            double focus = capture.GetCaptureProperty(CapProp.Focus);
+            double exposure = capture.GetCaptureProperty(CapProp.Exposure);
+            double saturation = capture.GetCaptureProperty(CapProp.Saturation);
+            double sharpness = capture.GetCaptureProperty(CapProp.Sharpness);
+            double gain = capture.GetCaptureProperty(CapProp.Gain);
+            double gamma = capture.GetCaptureProperty(CapProp.Gamma);
 
-        private void ctms_setGainAddress_Click(object sender, EventArgs e) {
-            if (!CheckPasswordSetAddress())
-            {
-                return;
-            }
-            ctms_setGainAddress.Checked = true;
-            ctms_setGammaAddress.Checked = false;
-            ctms_setSaturationAddress.Checked = false;
-            if (steptest_camera_read2d_flag)
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_address_read2d.txt", Address.gain);
-            }
-            else
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_address.txt", Address.gain);
-            }
-        }
-
-        private void ctms_setGammaAddress_Click(object sender, EventArgs e) {
-            if (!CheckPasswordSetAddress())
-            {
-                return;
-            }
-            ctms_setGainAddress.Checked = false;
-            ctms_setGammaAddress.Checked = true;
-            ctms_setSaturationAddress.Checked = false;
-            if (steptest_camera_read2d_flag)
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_address_read2d.txt", Address.gamma);
-            }
-            else
-            {
-                File.WriteAllText("../../config/test_head_" + head + "_address.txt", Address.gamma);
-            }
-        }
-
-        private void ctms_setSaturationAddressCsv_Click(object sender, EventArgs e) {
-            string address = String.Empty;
-            while (true)
-            {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Set saturation address in csv", "Saturation Address",
-                    ctms_setSaturationAddressCsv.Text, 500, 300);
-                if (input == "")
-                    return;
-                if (!CheckPasswordSetAddress())
-                {
-                    return;
-                }
-                address = input;
-                break;
-            }
-            ctms_setSaturationAddressCsv.Text = address;
-            File.WriteAllText("../../config/test_head_" + head + "_saturation_" + steptest + ".txt", address.ToString());
-        }
-
-        private void ctms_setGainAddressCsv_Click(object sender, EventArgs e) {
-            string address = String.Empty;
-            while (true)
-            {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Set gain address in csv", "Gain Address",
-                    ctms_setGainAddressCsv.Text, 500, 300);
-                if (input == "")
-                    return;
-                if (!CheckPasswordSetAddress())
-                {
-                    return;
-                }
-                address = input;
-                break;
-            }
-            ctms_setGainAddressCsv.Text = address;
-            File.WriteAllText("../../config/test_head_" + head + "_gain_" + steptest + ".txt", address.ToString());
-        }
-
-        private void ctms_setGammaAddressCsv_Click(object sender, EventArgs e) {
-            string address = String.Empty;
-            while (true)
-            {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Set gamma address in csv", "Gamma Address",
-                    ctms_setGammaAddressCsv.Text, 500, 300);
-                if (input == "")
-                    return;
-                if (!CheckPasswordSetAddress())
-                {
-                    return;
-                }
-                address = input;
-                break;
-            }
-            ctms_setGammaAddressCsv.Text = address;
-            File.WriteAllText("../../config/test_head_" + head + "_gamma_" + steptest + ".txt", address.ToString());
-        }
-
-        public static class Address {
-            public static readonly string gain = "Gain";
-            public static readonly string gamma = "Gamma";
-            public static readonly string saturation = "Saturation";
+            string pathConfig = $"../../config_cameraDenali/test_head_{head}_";
+            File.WriteAllText($"{pathConfig}zoom_{steptest}.txt", zoom.ToString());
+            File.WriteAllText($"{pathConfig}pan_{steptest}.txt", pan.ToString());
+            File.WriteAllText($"{pathConfig}tilt_{steptest}.txt", tilt.ToString());
+            File.WriteAllText($"{pathConfig}contrast_{steptest}.txt", contrast.ToString());
+            File.WriteAllText($"{pathConfig}focus_{steptest}.txt", focus.ToString());
+            File.WriteAllText($"{pathConfig}exposure_{steptest}.txt", exposure.ToString());
+            File.WriteAllText($"{pathConfig}saturation_{steptest}.txt", saturation.ToString());
+            File.WriteAllText($"{pathConfig}gain_{steptest}.txt", gain.ToString());
+            File.WriteAllText($"{pathConfig}gamma_{steptest}.txt", gamma.ToString());
+            File.WriteAllText($"{pathConfig}sharpness_{steptest}.txt", sharpness.ToString());
+            File.WriteAllText($"{pathConfig}brightness_{steptest}.txt", brightness.ToString());
         }
     }
 }
